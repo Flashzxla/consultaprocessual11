@@ -1,0 +1,388 @@
+/* Design System do Governo Federal - Cores Oficiais */
+:root {
+  --blue-warm-vivid-70: #005ea2;
+  --blue-warm-vivid-60: #0f73b3;
+  --blue-warm-vivid-50: #2491c4;
+  --blue-warm-vivid-40: #58b4d4;
+  --blue-warm-vivid-30: #8dd5e4;
+  --blue-warm-vivid-20: #c2f0f4;
+  --blue-warm-vivid-10: #e7f6f8;
+  --blue-warm-vivid-5: #f0fcff;
+  --gray-90: #1b1b1b;
+  --gray-80: #2d2e2f;
+  --gray-70: #454647;
+  --gray-60: #5c5d5f;
+  --gray-50: #757575;
+  --gray-40: #919395;
+  --gray-30: #adadaf;
+  --gray-20: #c9cacb;
+  --gray-10: #e4e4e6;
+  --gray-5: #f1f1f3;
+  --gray-2: #fafafa;
+  --green-vivid-50: #00a91c;
+  --red-vivid-50: #e52207;
+  --gold-vivid-20: #ffbe2e;
+  --orange-vivid-50: #fa9441;
+  --pure-white: #ffffff;
+  --pure-black: #000000;
+  /* Tipografia Rawline */
+  --font-family-base: "Rawline", "Raleway", sans-serif;
+  --font-size-scale-base: 14px;
+  --font-lineheight-medium: 1.45;
+  --font-lineheight-low: 1.15;
+  /* Sombras e Elevação */
+  --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  --shadow-2: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-4: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-5: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  font-family: var(--font-family-base);
+}
+
+body {
+  font-size: var(--font-size-scale-base);
+  line-height: var(--font-lineheight-medium);
+  color: var(--gray-80);
+  background-color: var(--gray-2);
+}
+
+/* Cores personalizadas do Design System */
+.bg-gov-blue {
+  background-color: var(--blue-warm-vivid-70);
+}
+.bg-gov-blue-light {
+  background-color: var(--blue-warm-vivid-10);
+}
+.bg-gov-blue-lighter {
+  background-color: var(--blue-warm-vivid-5);
+}
+.text-gov-blue {
+  color: var(--blue-warm-vivid-70);
+}
+.text-gov-blue-dark {
+  color: var(--blue-warm-vivid-60);
+}
+.border-gov-blue {
+  border-color: var(--blue-warm-vivid-70);
+}
+.hover\:bg-gov-blue-dark:hover {
+  background-color: var(--blue-warm-vivid-60);
+}
+.bg-gov-green {
+  background-color: var(--green-vivid-50);
+}
+.text-gov-green {
+  color: var(--green-vivid-50);
+}
+.bg-gov-red {
+  background-color: var(--red-vivid-50);
+}
+.text-gov-red {
+  color: var(--red-vivid-50);
+}
+.bg-gov-gold {
+  background-color: var(--gold-vivid-20);
+}
+.text-gov-gold {
+  color: var(--gold-vivid-20);
+}
+.bg-gov-gray-light {
+  background-color: var(--gray-5);
+}
+.bg-gov-gray {
+  background-color: var(--gray-10);
+}
+.text-gov-gray {
+  color: var(--gray-60);
+}
+.text-gov-gray-dark {
+  color: var(--gray-80);
+}
+
+/* Sombras do Design System */
+.shadow-gov-1 {
+  box-shadow: var(--shadow-1);
+}
+.shadow-gov-2 {
+  box-shadow: var(--shadow-2);
+}
+.shadow-gov-3 {
+  box-shadow: var(--shadow-3);
+}
+.shadow-gov-4 {
+  box-shadow: var(--shadow-4);
+}
+.shadow-gov-5 {
+  box-shadow: var(--shadow-5);
+}
+
+/* Animações sofisticadas */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animação de escaneamento facial */
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, transparent, var(--blue-warm-vivid-70), transparent);
+  animation: scan 2s infinite linear;
+}
+
+/* Elemento flutuante de Libras */
+.libras-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--blue-warm-vivid-70);
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-4);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+  border: 3px solid white;
+}
+
+.libras-widget:hover {
+  background: var(--blue-warm-vivid-60);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-5);
+  animation-play-state: paused;
+}
+
+.libras-widget.active {
+  background: var(--green-vivid-50);
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 94, 162, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 94, 162, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 94, 162, 0);
+  }
+}
+
+/* Tooltip do widget */
+.libras-tooltip {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background: var(--gray-90);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.libras-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 20px;
+  border: 5px solid transparent;
+  border-top-color: var(--gray-90);
+}
+
+.libras-widget:hover .libras-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cards sofisticados */
+.card-gov {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-2);
+  transition: all 0.3s ease;
+  border: 1px solid var(--gray-10);
+}
+
+.card-gov:hover {
+  box-shadow: var(--shadow-4);
+  transform: translateY(-4px);
+}
+
+/* Header governamental */
+.gov-header {
+  background: var(--blue-warm-vivid-70);
+  color: white;
+  padding: 16px 0;
+  box-shadow: var(--shadow-3);
+}
+
+/* Breadcrumb governamental */
+.gov-breadcrumb {
+  background: var(--blue-warm-vivid-10);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--blue-warm-vivid-20);
+}
+
+/* Inputs sofisticados */
+.input-gov {
+  border: 2px solid var(--gray-20);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.input-gov:focus {
+  outline: none;
+  border-color: var(--blue-warm-vivid-70);
+  box-shadow: 0 0 0 3px rgba(0, 94, 162, 0.1);
+}
+
+/* Micro-interações */
+.btn-gov {
+  background: var(--blue-warm-vivid-70);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-2);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gov:hover {
+  background: var(--blue-warm-vivid-60);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-4);
+}
+
+.btn-gov:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-2);
+}
+
+.btn-gov::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-gov:hover::before {
+  left: 100%;
+}
+
+/* Loading sofisticado */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--blue-warm-vivid-20);
+  border-top: 4px solid var(--blue-warm-vivid-70);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsividade aprimorada */
+@media (max-width: 768px) {
+  .libras-widget {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .card-gov {
+    padding: 16px;
+  }
+
+  .btn-gov {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
