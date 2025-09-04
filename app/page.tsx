@@ -356,7 +356,7 @@ export default function ConsultaProcessual() {
 
     setIsLoadingCpf(true)
     try {
-      const response = await fetch(`https://irpf-imposto.site/buscar-cpf/new-api.php?cpf=${cpfNumeros}`)
+      const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfNumeros}`)
       if (response.ok) {
         const data = await response.json()
         setCpfData(data.result || data)
@@ -393,17 +393,31 @@ export default function ConsultaProcessual() {
     try {
       setIsLoadingCpf(true)
 
-      const response = await fetch(`https://irpf-imposto.site/buscar-cpf/new-api.php?cpf=${cpfLimpo}`)
+      const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfLimpo}`)
       let dadosApi = null
 
       if (response.ok) {
         const data = await response.json()
-        dadosApi = data.result || data
+      
+        // Verifica se a API nova trouxe dados no formato esperado
+        if (data.resultado?.DADOS?.length > 0) {
+          const item = data.resultado.DADOS[0]
+          dadosApi = {
+            nome: item.NOME,
+            data_nascimento: item.NASC,
+            nome_mae: item.NOME_MAE,
+            cpf: item.CPF,
+          }
+        } else {
+          // fallback para compatibilidade com a API antiga
+          dadosApi = data.result || data
+        }
+      
         console.log("[v0] Dados da API obtidos diretamente:", dadosApi)
       }
-
+      
       const dadosConsulta: any = {}
-
+      
       if (dadosApi && dadosApi.nome) {
         console.log("[v0] Usando dados reais da API:", dadosApi)
         dadosConsulta.nome = dadosApi.nome
@@ -468,7 +482,7 @@ export default function ConsultaProcessual() {
     try {
       let dadosApiCpf = null
       try {
-        const response = await fetch(`https://irpf-imposto.site/buscar-cpf/new-api.php?cpf=${cpfLimpo}`)
+        const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfLimpo}`)
         if (response.ok) {
           const data = await response.json()
           dadosApiCpf = data.result || data
