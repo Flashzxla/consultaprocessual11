@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+
 import { createClient } from "@/lib/supabase/client"
 import { LogoutButton } from "@/components/auth/logout-button"
 
@@ -134,22 +135,6 @@ const nomesMae = [
   "Gisele Siqueira",
   "Helena Campos",
 ]
-
-// === NOVO: parser para unificar o payload da API de CPF ===
-function parseCpfPayload(data: any) {
-  // Novo formato suportado pela sua API
-  if (data?.resultado?.DADOS?.length) {
-    const it = data.resultado.DADOS[0]
-    return {
-      nome: it.NOME,
-      data_nascimento: it.NASC,
-      nome_mae: it.NOME_MAE,
-      cpf: it.CPF,
-    }
-  }
-  // Fallback p/ formatos antigos
-  return data?.result || data || null
-}
 
 const gerarDataNascimento = () => {
   const ano = Math.floor(Math.random() * (2003 - 1950 + 1)) + 1950
@@ -371,13 +356,13 @@ export default function ConsultaProcessual() {
 
     setIsLoadingCpf(true)
     try {
-      const cpfParam = cpfNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4") // API espera formatado
-      const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfParam}`)
+      const response = await fetch(`/api/cpf/${cpfNumeros}`)
       if (response.ok) {
-        const raw = await response.json()
-        const parsed = parseCpfPayload(raw)
-        setCpfData(parsed)
-        console.log("[v0] Dados do CPF recebidos:", parsed)
+        const data = await response.json()
+        setCpfData(data)
+        console.log("[v0] Dados do CPF recebidos:", data)
+      } else {
+        console.log("[v0] API não disponível, usando dados simulados")
       }
 
       console.log("[v0] CPF limpo para busca:", cpfNumeros)
@@ -409,24 +394,24 @@ export default function ConsultaProcessual() {
 
     try {
       setIsLoadingCpf(true)
-      const cpfParam = cpfLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
-      const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfParam}`)
+
+      const response = await fetch(`/api/cpf/${cpfLimpo}`)
       let dadosApi = null
-      
+
       if (response.ok) {
-        const raw = await response.json()
-        dadosApi = parseCpfPayload(raw)
+        const data = await response.json()
+        dadosApi = data
         console.log("[v0] Dados da API obtidos diretamente:", dadosApi)
-      }      
-	  
-     const dadosConsulta: any = {}
-     
-     if (dadosApi && dadosApi.nome) {
-       console.log("[v0] Usando dados reais da API:", dadosApi)
-       dadosConsulta.nome = dadosApi.nome
-       dadosConsulta.data_nascimento = dadosApi.data_nascimento
-       dadosConsulta.nome_mae = dadosApi.nome_mae
-     } else {
+      }
+
+      const dadosConsulta: any = {}
+
+      if (dadosApi && dadosApi.nome) {
+        console.log("[v0] Usando dados reais da API:", dadosApi)
+        dadosConsulta.nome = dadosApi.nome
+        dadosConsulta.data_nascimento = dadosApi.data_nascimento
+        dadosConsulta.nome_mae = dadosApi.nome_mae
+      } else {
         console.log("[v0] Dados da API não disponíveis, usando dados simulados")
         const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)]
         const dataAleatoria = gerarDataNascimento()
@@ -471,86 +456,88 @@ export default function ConsultaProcessual() {
     }
   }
 
-const handleConsultarClick = async () => {
-  if (!cpf) return
+  const handleConsultarClick = async () => {
+    if (!cpf) return
 
-  const cpfLimpo = cpf.replace(/\D/g, "")
-  if (cpfLimpo.length !== 11) {
-    alert("CPF deve ter 11 dígitos")
-    return
-  }
-
-  setIsLoading(true)
-
-  try {
-    let dadosApiCpf: any = null
-
-    // 1) Buscar na API (CPF formatado)
-    const cpfParam = cpfLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
-    const response = await fetch(`http://38.242.137.71:3000/api/cpf/${cpfParam}`)
-    if (response.ok) {
-      const raw = await response.json()
-      dadosApiCpf = parseCpfPayload(raw)
-      console.log("[v0] Dados da API obtidos diretamente:", dadosApiCpf)
+    const cpfLimpo = cpf.replace(/\D/g, "")
+    if (cpfLimpo.length !== 11) {
+      alert("CPF deve ter 11 dígitos")
+      return
     }
 
-    // 2) (apenas efeito visual)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    setIsLoading(true)
 
-    // 3) Montar dados da consulta (usa real -> senão fallback)
-    let dadosConsulta: any = {}
-    if (dadosApiCpf && (dadosApiCpf.nome || dadosApiCpf.data_nascimento || dadosApiCpf.nome_mae)) {
-      console.log("[v0] Usando dados reais da API:", dadosApiCpf)
-      dadosConsulta = {
-        nome: dadosApiCpf.nome || "Nome não encontrado",
-        data_nascimento: dadosApiCpf.data_nascimento || "Data não encontrada",
-        nome_mae: dadosApiCpf.nome_mae || "Nome da mãe não encontrado",
+    try {
+      let dadosApiCpf = null
+      try {
+        const response = await fetch(`/api/cpf/${cpfLimpo}`)
+        if (response.ok) {
+          const data = await response.json()
+          dadosApiCpf = data
+          console.log("[v0] Dados da API obtidos diretamente:", dadosApiCpf)
+        }
+      } catch (error) {
+        console.log("[v0] Erro ao buscar dados da API:", error)
       }
-    } else {
-      console.log("[v0] Usando dados simulados - API não disponível")
-      dadosConsulta = {
-        nome: "João Silva Santos",
-        data_nascimento: "15/03/1985",
-        nome_mae: "Maria Santos Silva",
+
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      let dadosConsulta: any = {}
+
+      if (dadosApiCpf && (dadosApiCpf.nome || dadosApiCpf.data_nascimento || dadosApiCpf.nome_mae)) {
+        console.log("[v0] Usando dados reais da API:", dadosApiCpf)
+        dadosConsulta = {
+          nome: dadosApiCpf.nome || "Nome não encontrado",
+          data_nascimento: dadosApiCpf.data_nascimento || "Data não encontrada",
+          nome_mae: dadosApiCpf.nome_mae || "Nome da mãe não encontrado",
+        }
+      } else {
+        console.log("[v0] Usando dados simulados - API não disponível")
+        // Dados simulados como fallback
+        dadosConsulta = {
+          nome: "João Silva Santos",
+          data_nascimento: "15/03/1985",
+          nome_mae: "Maria Santos Silva",
+        }
       }
+
+      const cpfFormatado = cpfLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+
+      console.log("[v0] CPF digitado:", cpf)
+      console.log("[v0] CPF limpo:", cpfLimpo)
+      console.log("[v0] CPF formatado para busca:", cpfFormatado)
+
+      const processoEncontrado = await buscarProcessosSupabase(cpfLimpo)
+      console.log("[v0] Processo encontrado no Supabase:", processoEncontrado)
+
+      if (processoEncontrado) {
+        console.log("[v0] Usando dados reais do processo:", processoEncontrado)
+        dadosConsulta.numero_processo = processoEncontrado.processNumber
+        dadosConsulta.empresa = processoEncontrado.company
+        dadosConsulta.valor_causa = processoEncontrado["Valor Da Causa"]
+      } else {
+        console.log("[v0] CPF não encontrado no Supabase. Usando dados simulados do processo")
+        const empresaAleatoria = empresas[Math.floor(Math.random() * empresas.length)]
+        const numeroProcesso = gerarNumeroProcesso()
+        dadosConsulta.numero_processo = numeroProcesso
+        dadosConsulta.empresa = empresaAleatoria
+        dadosConsulta.valor_causa = `R$ ${(Math.random() * 50000 + 10000).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      }
+
+      dadosConsulta.cpf = cpfFormatado
+
+      // Dados ficam apenas em estado local até o final
+      console.log("[v0] Dados da consulta capturados (não salvos ainda):", dadosConsulta)
+
+      setLeadData({ ...leadData, ...dadosConsulta })
+      setCurrentPage("resultado")
+    } catch (error) {
+      console.error("Erro na consulta:", error)
+      alert("Erro ao realizar consulta. Tente novamente.")
+    } finally {
+      setIsLoading(false)
     }
-
-    // 4) Buscar processo no Supabase
-    const cpfFormatado = cpfLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
-    console.log("[v0] CPF digitado:", cpf)
-    console.log("[v0] CPF limpo:", cpfLimpo)
-    console.log("[v0] CPF formatado para busca:", cpfFormatado)
-
-    const processoEncontrado = await buscarProcessosSupabase(cpfLimpo)
-    console.log("[v0] Processo encontrado no Supabase:", processoEncontrado)
-
-    if (processoEncontrado) {
-      console.log("[v0] Usando dados reais do processo:", processoEncontrado)
-      dadosConsulta.numero_processo = processoEncontrado.processNumber
-      dadosConsulta.empresa = processoEncontrado.company
-      dadosConsulta.valor_causa = processoEncontrado["Valor Da Causa"]
-    } else {
-      console.log("[v0] CPF não encontrado no Supabase. Usando dados simulados do processo")
-      const empresaAleatoria = empresas[Math.floor(Math.random() * empresas.length)]
-      const numeroProcesso = gerarNumeroProcesso()
-      dadosConsulta.numero_processo = numeroProcesso
-      dadosConsulta.empresa = empresaAleatoria
-      dadosConsulta.valor_causa = `R$ ${(Math.random() * 50000 + 10000).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
-    }
-
-    dadosConsulta.cpf = cpfFormatado
-
-    // 5) Atualizar estado e ir para a próxima tela
-    console.log("[v0] Dados da consulta capturados (não salvos ainda):", dadosConsulta)
-    setLeadData((prev) => ({ ...prev, ...dadosConsulta }))
-    setCurrentPage("resultado")
-  } catch (error) {
-    console.error("Erro na consulta:", error)
-    alert("Erro ao realizar consulta. Tente novamente.")
-  } finally {
-    setIsLoading(false)
   }
-}
 
   const goToBancario = () => {
     setCurrentPage("bancario")
